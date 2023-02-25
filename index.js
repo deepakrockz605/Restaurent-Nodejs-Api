@@ -28,11 +28,6 @@ app.use((req, res, next) => {
   next();
 });
 
-db.connect((err) => {
-  if (err) throw err;
-  console.log("Database Connected");
-});
-
 app.listen(PORT, () => {
   console.log(`App Running on Port ${PORT}`);
 });
