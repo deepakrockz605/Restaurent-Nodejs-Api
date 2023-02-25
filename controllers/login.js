@@ -7,7 +7,7 @@ const bodyParser = require("body-parser");
 const jwt = require("jsonwebtoken");
 
 login.use(cors());
-
+login.options('*', cors());
 login.use(bodyParser.json());
 
 login.post("/login", (req, res) => {

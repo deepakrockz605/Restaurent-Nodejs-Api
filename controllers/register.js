@@ -6,6 +6,7 @@ const bcrypt = require("bcrypt");
 const bodyParser = require("body-parser");
 
 register.use(cors());
+register.options('*', cors());
 
 process.env.SECRET_KEY = "secret";
 
