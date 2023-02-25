@@ -5,8 +5,16 @@ const db = require("../routes/db-config");
 const bcrypt = require("bcrypt");
 const bodyParser = require("body-parser");
 
-register.use(cors());
+register.use(cors({ credentials: true }))
 register.options('*', cors());
+
+register.use(function (req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  next();
+});
 
 process.env.SECRET_KEY = "secret";
 
