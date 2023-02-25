@@ -37,5 +37,9 @@ app.listen(PORT, () => {
   console.log(`App Running on Port ${PORT}`);
 });
 
+app.get('/', (req,res) => {
+  res.send('Hello Deepak')
+})
+
 var Users = require("./controllers/users");
 app.use("/users", Users);
