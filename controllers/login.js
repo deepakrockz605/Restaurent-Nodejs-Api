@@ -39,7 +39,7 @@ login.post("/login", (req, res) => {
         const token = jwt.sign(
           { id: userData.UserID },
           process.env.SECRET_KEY,
-          { expiresIn: 1000 * 60 * 5 }
+          { expiresIn: '15m' }
         );
         
         res.json({

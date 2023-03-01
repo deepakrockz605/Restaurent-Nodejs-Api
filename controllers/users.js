@@ -4,6 +4,7 @@ const users = express.Router();
 const bodyParser = require("body-parser");
 const register = require('./register');
 const login = require('./login');
+const passwordReset = require('./passwordReset');
 const logout = require('./logout');
 process.env.SECRET_KEY = "secret";
 users.use(cors({ credentials: true }))
@@ -24,6 +25,9 @@ users.post("/register", register);
 
 users.post("/login", login);
 
-users.post("/logout", logout);
+users.post("/login", login);
+
+users.post("/reset-password", passwordReset);
+users.post("/update-password", passwordReset);
 
 module.exports = users;
