@@ -4,8 +4,11 @@ const cors = require("cors");
 const db = require("../routes/db-config");
 const bcrypt = require("bcrypt");
 const bodyParser = require("body-parser");
+const nodemailer = require("nodemailer");
 
-register.use(cors({ credentials: true }))
+register.use(cors({
+  credentials: true
+}))
 register.options('*', cors());
 
 register.use(function (req, res, next) {
@@ -20,16 +23,53 @@ process.env.SECRET_KEY = "secret";
 
 register.use(bodyParser.json());
 
+const sendMail = async (user, text) => {
+  var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.DUMMY_EMAIL_SENDER,
+      pass: process.env.DUMMY_PASSWORD
+    }
+  });
+
+  var mailOptions = {
+    from: 'Test',
+    to: `${user.email}`,
+    subject: 'Account Registration',
+    text
+  };
+
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
+}
+
 register.post("/register", (req, res) => {
-  const { firstname, lastname, username, email, password } = req.body;
+  const {
+    firstname,
+    lastname,
+    username,
+    email,
+    password
+  } = req.body;
 
   let isUserAlready = "SELECT * from users WHERE username = ? OR email = ?";
   db.query(isUserAlready, [username, email], async (err, result) => {
     if (err) {
-      res.json({ err });
+      res.json({
+        err
+      });
     }
     if (result.length > 0) {
-      res.json({ status: 401, message: "Username or Email Exists Already !", success: false, });
+      res.json({
+        status: 401,
+        message: "Username or Email Exists Already !",
+        success: false,
+      });
     } else {
       const hashedPassword = await bcrypt.hash(password, 10);
       var user = {
@@ -41,13 +81,17 @@ register.post("/register", (req, res) => {
       };
       db.query("INSERT INTO users SET ?", user, (err2) => {
         if (err2) {
-          res.json({ err2 });
+          res.json({
+            err2
+          });
         } else {
+          const text = `Dear ${user.firstname}${' '}${user.lastname} You have succesfully registered to Delicious Restaurant. Please Login with the credentials to continue Online Food Order. Happy Hunger !!`
+          sendMail(user, text)
+
           res.json({
             status: 200,
             success: true,
-            message:
-              firstname +
+            message: firstname +
               " " +
               lastname +
               " Your Email ID : " +
