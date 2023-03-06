@@ -49,7 +49,8 @@ login.post("/login", (req, res) => {
           userData: {
             FirstName: userData.FirstName,
             LastName: userData.LastName,
-            Email: userData.Email
+            Email: userData.Email,
+            Role: userData.Role
           },
           success: true,
         });

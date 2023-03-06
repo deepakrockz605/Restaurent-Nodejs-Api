@@ -7,8 +7,11 @@ const db = sql.createPool({
   user: process.env.DATABASE_USER,
   password: process.env.DATABASE_PASSWORD,
   database: process.env.DATABASE,
-  connectionLimit: 100,
-  multipleStatements: true
+  multipleStatements: true,
+  connectionLimit : 1000,
+  connectTimeout  : 60 * 60 * 1000,
+  acquireTimeout  : 60 * 60 * 1000,
+  timeout         : 60 * 60 * 1000,
 });
 
 module.exports = db;

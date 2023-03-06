@@ -54,7 +54,8 @@ register.post("/register", (req, res) => {
     lastname,
     username,
     email,
-    password
+    password,
+    role
   } = req.body;
 
   let isUserAlready = "SELECT * from users WHERE username = ? OR email = ?";
@@ -64,19 +65,20 @@ register.post("/register", (req, res) => {
         err
       });
     }
-    if (result.length > 0) {
+    if (result && result.length > 0) {
       res.json({
         status: 401,
         message: "Username or Email Exists Already !",
         success: false,
       });
     } else {
-      const hashedPassword = await bcrypt.hash(password, 10);
+      const hashedPassword = await bcrypt.hash(password || 'Test123', 10);
       var user = {
         firstname,
         lastname,
         username,
         email,
+        role: role ? role : 'Visitor',
         password: hashedPassword,
       };
       db.query("INSERT INTO users SET ?", user, (err2) => {
