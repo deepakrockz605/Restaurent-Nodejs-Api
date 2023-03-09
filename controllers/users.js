@@ -31,7 +31,8 @@ users.post("/update-password", passwordReset);
 users.get("/fetch-users", fetchUsers);
 users.delete("/delete-user/:id", fetchUsers);
 
-users.post('/upload-product',upload.single('image'), fetchFiles)
+users.post('/upload-product', upload.single('image'), fetchFiles)
+users.put('/update-product', upload.single('image'), fetchFiles) 
 users.get('/get-products', fetchFiles) 
 
 
